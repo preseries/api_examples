@@ -9,9 +9,11 @@ import traceback
 import csv
 import re
 import requests
+import random
 
 from Levenshtein import jaro_winkler
 from xlrd import open_workbook
+from xlwt import Workbook
 
 PRESERIES_PROTOCOL = 'https'
 PRESERIES_HOST = "preseries.io"
@@ -165,7 +167,7 @@ def select_best_company(query_params, candidates):
         # Calculate the distance ratio as the AVG between all the computed
         # ratios for the candidate
         ratios.append(
-            (float(sum(candidate_ratios))/len(candidate_ratios), candidate))
+            (float(sum(candidate_ratios))/(len(query_params) - 1), candidate))
 
     # The best match first
     ratios = reversed(sorted(ratios, key=lambda x: x[0]))
@@ -179,10 +181,10 @@ def get_search_data(args):
     This method is responsible for build the query parameters that we are going
     to use to look for the companies in PreSeries informed in the Excel file.
     
-    The query string will have only the id criteria or the name/country_code 
-        if the id is not informed. The domain won't we used in the query, we 
-        will use it later for discriminate when we receive multiple companies as
-        the result of the search.
+    The query string will have only the id criteria or the name of the company
+        if the id is not informed. The domain and country_code won't be used
+        in the query, we will use them later for select the best match from
+        all the candidates that matched the query.
     
     :param args: arguments passed to the script
     :return: a list where each row is one company which contains a tuple with 
@@ -196,7 +198,6 @@ def get_search_data(args):
     logging.debug("Sheet name [%s]." % first_sheet.name)
 
     companies_query = []
-
     for row in range(args.skip_rows, first_sheet.nrows):
 
         logging.debug("Processing row: %d" % row)
@@ -212,8 +213,14 @@ def get_search_data(args):
 
         if args.column_name and \
                 first_sheet.cell_value(row, excel2num(args.column_name)):
-            company_name = first_sheet.cell_value(
-                row, excel2num(args.column_name))
+
+            try:
+                company_name = first_sheet.cell_value(
+                    row, excel2num(args.column_name)).encode('cp1252')
+            except UnicodeEncodeError as ex:
+                company_name = first_sheet.cell_value(
+                    row, excel2num(args.column_name)).encode('utf-8')
+                pass
 
             query_string += "&" if len(query_string) > 0 else ""
             query_string += "name__icontains=%s" % company_name
@@ -224,8 +231,8 @@ def get_search_data(args):
                 first_sheet.cell_value(row, excel2num(args.column_domain)))
 
             if company_domain:
-                # We only use the domain to solve multiplicity in results
-                # not during the PreSeries search
+                # We only use the domain after the search to select the
+                # best candidate
                 query_params["domain"] = company_domain
 
         if args.column_country and \
@@ -233,13 +240,30 @@ def get_search_data(args):
             country_code = resolve_country(first_sheet.cell_value(
                 row, excel2num(args.column_country)))
 
-            query_string += "&" if len(query_string) > 0 else ""
-            query_string += "country_code=%s" % country_code
-            query_params['country_code'] = country_code
+            if country_code:
+                # We only use the country_code after the search to select the
+                # best candidate
+                query_params['country_code'] = country_code
 
         companies_query.append((query_string, query_params))
 
-    return companies_query
+    return companies_query, first_sheet
+
+
+def find_companies_fake(companies_query):
+
+    found_companies = []
+    unknown_companies = []
+
+    random.seed(9001)
+
+    for query_string, query_params in companies_query:
+        if random.choice([True, False]):
+            found_companies.append(query_params)
+        else:
+            unknown_companies.append(query_params)
+
+    return found_companies, unknown_companies
 
 
 def find_companies(companies_query):
@@ -263,23 +287,32 @@ def find_companies(companies_query):
         try:
             resp = requests.get(url).json()
         except Exception as e:
-            logging.exception("Unable to get the results "
-                              "from the server for URL: %s" % url)
-            raise e
+            try:
+                resp = requests.get(url.decode('cp1252')).json()
+            except:
+                logging.exception("Unable to get the results "
+                                  "from the server for URL: %s" % url)
+                raise e
 
-        # # We get multiple companies as a response.
+                # # We get multiple companies as a response.
         if resp['meta']['total_count'] > 1:
             best_candidate = select_best_company(query_params, resp['objects'])
             logging.warn("More than one match!\n"
                          "Params: %s \n"
                          "Selected candidate: %s" %
                          (query_params, best_candidate))
-            found_companies.append(best_candidate)
+
+            company_data = {"row": query_params["row"]}
+            company_data.update(best_candidate)
+
+            found_companies.append(company_data)
         elif resp['meta']['total_count'] == 0:
             logging.warn("Unknown company: %s" % query_params)
             unknown_companies.append(query_params)
         else:
-            found_companies.append(resp['objects'][0])
+            company_data = {"row": query_params["row"]}
+            company_data.update(resp['objects'][0])
+            found_companies.append(company_data)
 
     return found_companies, unknown_companies
 
@@ -308,6 +341,51 @@ def create_portfolio(portfolio_name, companies):
         logging.exception("Unable to create the portfolio. " 
                           "Portfolio: %s" % body)
         raise e
+
+
+def write_to_file(file_name,
+        companies, summary_columns, wb_sheet):
+    """
+    This method will generate a new Excel file the name <file_name> with
+    the data associated to all the companies passed as parameter in companies
+
+    :param companies: the list of companies
+    """
+
+    # companies_summary = { summary_data["row"]: summary_data
+    #                              for summary_data in companies_summary }
+
+    workbook = Workbook()
+    sheet = workbook.add_sheet('Companies')
+
+    # Build the header names
+    header = ["Original Row", "Company Name", "Domain", "Country"]
+    header.extend(summary_columns) \
+        if summary_columns and len(summary_columns) > 0 else None
+    [sheet.write(0, index, value) for index, value in enumerate(header)]
+
+    for index, company_data in enumerate(companies):
+        sheet.write(1 + index, 0, company_data["row"])
+        sheet.write(1 + index, 1, company_data["name"].decode('utf-8', 'ignore')
+                    if "name" in company_data else "")
+        sheet.write(1 + index, 2, company_data["country_code"]
+                    if "country_code" in company_data else "")
+        sheet.write(1 + index, 3, company_data["domain"]
+                    if "domain" in company_data else "")
+        for index2, summary_column in enumerate(summary_columns):
+            try:
+                columnvalue = wb_sheet.cell_value(
+                    company_data["row"],
+                    excel2num(summary_column)).encode('cp1252')
+            except UnicodeEncodeError as ex:
+                columnvalue = wb_sheet.cell_value(
+                    company_data["row"],
+                    excel2num(summary_column)).encode('utf-8')
+                pass
+
+            sheet.write(1 + index, 4 + index2,
+                        columnvalue.decode('utf-8', 'ignore'))
+    workbook.save(file_name)
 
 
 def main(args=sys.argv[1:]):
@@ -393,6 +471,20 @@ def main(args=sys.argv[1:]):
                                  "Ex. 'https://preseries.com' or "
                                  "'preseries.com'")
 
+        # The letters of the columns that we want to use as addiction info
+        # about the companies to be included in the output files.
+        parser.add_argument('--summary-columns',
+                            required=False,
+                            type=str,
+                            nargs='+',
+                            action='store',
+                            dest='summary_columns',
+                            default=None,
+                            help="The letters of the columns that we want"
+                                 " to use to reference companies in the"
+                                 " original excel file."
+                                 "Ex. G H JJ")
+
         # The number of rows we need to skip to get access to the company data
         # useful if the first rows are not related to the data itself, for
         # instance the header
@@ -410,13 +502,21 @@ def main(args=sys.argv[1:]):
 
         load_valid_countries()
 
-        companies_query = get_search_data(args)
+        companies_query, wb_sheet = get_search_data(args)
 
-        found_companies, unknown_companies = find_companies(companies_query)
+        known_companies, unknown_companies = find_companies(companies_query)
+        # known_companies, unknown_companies = find_companies_fake(companies_query)
 
-        portfolio_id = create_portfolio(args.portfolio_name, found_companies)
+        portfolio_id = create_portfolio(args.portfolio_name, known_companies)
 
-        logging.info("Unknown companies: %s" % unknown_companies)
+        write_to_file('Unknown_companies.xls',
+                      unknown_companies, args.summary_columns, wb_sheet)
+
+        write_to_file('Known_companies.xls',
+                      known_companies, args.summary_columns, wb_sheet)
+
+        logging.info("Unknown companies: %d" % len(unknown_companies))
+        logging.info("Known companies: %d" % len(known_companies))
 
         logging.info(
             "Portfolio: http://preseries.com/dashboard/portfolio/"
