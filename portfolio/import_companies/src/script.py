@@ -266,6 +266,21 @@ def find_companies_fake(companies_query):
     return found_companies, unknown_companies
 
 
+def encoding_conversion(company_data):
+    """
+    We use this function to convert all the string values in the company_data
+    map into utf-8 versions of the strings
+
+    :param company_data: the company values loaded from the server
+    :return: the company values with the string ones converted into utf-8
+    """
+    for key, value in company_data.iteritems():
+        if isinstance(value, (str, unicode)):
+            company_data[key] = value.encode('utf-8')
+
+    return company_data
+
+
 def find_companies(companies_query):
     """
     We are going to get all the Companies from PreSeries using the search url 
@@ -305,14 +320,13 @@ def find_companies(companies_query):
             company_data = {"row": query_params["row"]}
             company_data.update(best_candidate)
 
-            found_companies.append(company_data)
+            found_companies.append(encoding_conversion(company_data))
         elif resp['meta']['total_count'] == 0:
             logging.warn("Unknown company: %s" % query_params)
             unknown_companies.append(query_params)
         else:
             company_data = {"row": query_params["row"]}
-            company_data.update(resp['objects'][0])
-            found_companies.append(company_data)
+            found_companies.append(encoding_conversion(company_data))
 
     return found_companies, unknown_companies
 
