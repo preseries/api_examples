@@ -22,6 +22,8 @@ setup(
     install_requires=[
         'openpyxl==2.4.8',
         'python-Levenshtein==0.12.0',
-        'requests==2.18.4'
+        'requests==2.18.4',
+        'xlrd==1.1.0',
+        'xlwt==1.3.0'
     ]
 )
