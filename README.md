@@ -7,8 +7,7 @@ processes inside the company.
 You will find all the documentation of the API here: 
 https://preseries.com/developers
 
-Remember that you need to define your credentials to access the PreSeries
-as environment variables, as explained here: https://preseries.com/developers/authentication
+Remember that you need to define your credentials as environment variables, as its explained here: https://preseries.com/developers/authentication
 
 ## src/preseries/preseries_api/portfolio/import_companies
 
