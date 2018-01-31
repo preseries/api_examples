@@ -250,12 +250,13 @@ class PreSeriesUtils(object):
         return companies_query, first_sheet
 
     @staticmethod
-    def xpath_get(mydict, path):
+    def xpath_get(mydict, path, default=""):
         elem = mydict
         try:
             for x in path.strip("/").split("/"):
                 elem = elem.get(x)
         except Exception:
+            elem = default
             pass
 
         return elem
@@ -276,7 +277,6 @@ class PreSeriesUtils(object):
             if isinstance(field_value, (list))
             else field_value for field_value in [
                 PreSeriesUtils.xpath_get(resource, field_name)
-                if field_name in resource else ""
                 for field_name in fields]]
 
             rows.append(row)
