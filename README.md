@@ -15,6 +15,15 @@ The first thing we need to do, before execute any of the following examples, is 
 
 To do so, we need to do the following tasks:
 
+### 1. Install Git
+
+Git is a version control system for tracking changes in computer files and coordinating work on those files among multiple people.
+
+Before you start using Git, you have to make it available on your computer. Even if it’s already installed, it’s probably a good idea to update to the latest version. You can either install it as a package or via another installer, or download the source code and compile it yourself.
+
+You will find here the instructions on how to install Git in your computer: [Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+
 ### 1. Clone this project
 
 We should decide the folder where we want to clone this project. We will reference this folder henceforth as ```$BASE_PATH```.
@@ -35,9 +44,9 @@ Anaconda is a freemium open source distribution of the Python and R programming 
   
 To install Anaconda we can follow the following instructions, depending on our operating system:
   
-  - Installing on Windows
-  - Installing on MAC
-  - Installing on Linux
+  - [Installing on Windows](https://conda.io/docs/user-guide/install/windows.html)
+  - [Installing on MAC](https://conda.io/docs/user-guide/install/macos.html)
+  - [Installing on Linux](https://conda.io/docs/user-guide/install/linux.html)
   
 At the end of the installation we should be able to execute the following command in a new Terminal window:
   
