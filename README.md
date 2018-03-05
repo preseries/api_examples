@@ -2,11 +2,9 @@
 
 Examples of how to use the PreSeries.io RESTful API
 
-This project will show how to use the API provided by PreSeries to automate 
-processes inside the company.
+The aim of this project is to show you how to use the API provided by PreSeries to automate processes inside the company.
 
-You will find all the documentation of the API here: 
-https://preseries.com/developers
+You will find all the documentation of the API here: https://preseries.com/developers
 
 Remember that you need to define your credentials as environment variables, as its explained here: https://preseries.com/developers/authentication
 
