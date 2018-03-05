@@ -24,7 +24,7 @@ Before you start using Git, you have to make it available on your computer. Even
 You will find here the instructions on how to install Git in your computer: [Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 
-### 1. Clone this project
+### 2. Clone this project
 
 We should decide the folder where we want to clone this project. We will reference this folder henceforth as ```$BASE_PATH```.
 
@@ -38,7 +38,7 @@ To clone the project we only need to execute the following commands in a Termina
 
 A new folder ```api_examples``` should appear now inside the ```$BASE_PATH``` folder with the contents of this Github repo.
 
-### 2. Install Anaconda distribution. 
+### 3. Install Anaconda distribution. 
 
 Anaconda is a freemium open source distribution of the Python and R programming languages that aims to simplify package management and deployment.
   
@@ -56,7 +56,7 @@ At the end of the installation we should be able to execute the following comman
 
 For a successful installation, a list of installed packages appears.
   
-### 3. Create a new conda environment for the examples.
+### 4. Create a new conda environment for the examples.
 
 With conda, you can create, export, list, remove and update environments that have different versions of Python and/or packages installed.
 
@@ -74,7 +74,7 @@ We need to create a new environment for our examples, and we will do that execut
     proceed ([y]/n)?
   ```
   
-### 4. Activate the environment and install libraries
+### 5. Activate the environment and install libraries
  
 Before execute any of the examples, we always will need to activate the conda environment. 
 
@@ -95,7 +95,7 @@ If we did not do it before, we would have to install all the required libraries 
 
 ## Examples
 
-Before execute any of the following examples we should have to open a new Terminal window and activate our environment as informed in the section [4. Activate the environment and install libraries](#4-activate-the-environment-and-install-libraries).
+Before execute any of the following examples we should have to open a new Terminal window and activate our environment as informed in the section [5. Activate the environment and install libraries](#5-activate-the-environment-and-install-libraries).
 
 We also should change our current directory to ```$BASE_PATH/api_examples/src/preseries/api_examples```:
 
