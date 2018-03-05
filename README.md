@@ -13,7 +13,7 @@ Remember that you need to define your credentials as environment variables, as i
 
 The first thing we need to do, before execute any of the following examples, is to setup our environment.
 
-To do so we need to executr the following tasks:
+To do so, we need to executr the following tasks:
 
 ### 1. Clone this project
 
