@@ -1,6 +1,6 @@
 # api_examples
 
-Example queries for the PreSeries.io RESTful API
+Code with examples of use of the PreSeries.io RESTful API
 
 This documentation is step-by-step instruction guide on how to get the PreSeries API up and running and start performing queries in matter of minutes. The PreSeries API allows for an easy automate of PreSeries-related querie. Moreover, it integrates seamlessly with other software solutions. Do not hesitate to contact us at support@preseries.com for any questions, comments, or requests regarding our API and/or its related documentation.
 
