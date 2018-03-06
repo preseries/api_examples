@@ -90,6 +90,7 @@ Before executing any of the examples, always remember to activate the conda envi
 Activate the environment:
 
     - On Windows, in your Anaconda Prompt, run ```activate preseries_api_examples```
+    
     - On macOS and Linux, in your Terminal Window, run ```source activate preseries_api_examples```
 
 You need to change the working directory (current folder) to the ```$BASE_PATH/api_examples``` path where the api_examples code has been cloned. Inside the folder you should be able to see the __setup.py__ file.
