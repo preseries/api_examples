@@ -66,7 +66,7 @@ We need to create a new environment for our examples, and we will do that execut
 1. Create the environment
 
   ```{bash}
-    conda-env create --name preseries_api_examples python=2.7
+    conda create -n preseries_api_examples python=2.7
   ```
 2. When conda asks you to proceed, type __y__:
 
