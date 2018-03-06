@@ -26,13 +26,13 @@ You will find here the instructions on how to install Git in your computer: [Ins
 
 ### 2. Clone this project
 
-We should decide the folder where we want to clone this project. We will reference this folder henceforth as ```$BASE_PATH```.
+We should decide the folder where we want to clone this project. We will reference this folder henceforth as ```BASE_PATH```.
 
 To clone the project we only need to execute the following commands in a Terminal window:
 
   
 ```{bash}
-  cd $BASE_PATH
+  cd <BASE_PATH>
   git clone https://github.com/preseries/api_examples.git
 ```
 
@@ -97,7 +97,7 @@ We need to change the working directory (current folder) to the ```$BASE_PATH/ap
 If we did not do it before, we would have to install all the required libraries before run the examples:
 
   ```{bash}
-      cd $BASE_PATH/api_examples
+      cd <BASE_PATH>/api_examples
       python setup.py install
   ```
 
@@ -106,10 +106,10 @@ If we did not do it before, we would have to install all the required libraries 
 
 Before execute any of the following examples we should have to open a new Terminal window and activate our environment as informed in the section [5. Activate the environment and install libraries](#5-activate-the-environment-and-install-libraries).
 
-We also should change our current directory to ```$BASE_PATH/api_examples/src/preseries/api_examples```:
+We also should change our current directory to ```<BASE_PATH>/api_examples/src/preseries/api_examples```:
 
   ```{bash}
-      cd $BASE_PATH/api_examples/src/preseries/api_examples
+      cd <BASE_PATH>/api_examples/src/preseries/api_examples
   ```
   
 ### Create a portfolio from an Excel file
@@ -119,7 +119,7 @@ This example shows how to create a new Portfolio using the companies informed in
 If you want to inspect the code you can find it inside the following folder:
 
 ```{bash}
-$BASE_PATH/src/preseries/preseries_api/portfolio/import_companies
+<BASE_PATH>/src/preseries/preseries_api/portfolio/import_companies
 ```
 
 To run the code you will need to execute the following command:
