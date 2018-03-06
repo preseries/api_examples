@@ -36,7 +36,9 @@ To clone the project we only need to execute the following commands in a Termina
   git clone https://github.com/preseries/api_examples.git
 ```
 
-A new folder ```api_examples``` should appear now inside the ```$BASE_PATH``` folder with the contents of this Github repo.
+  NOTE: You need to change <BASE_PATH> for the real path where the `api_examples` project will be cloned.
+
+A new folder ```api_examples``` should appear now inside the ```BASE_PATH``` folder with the contents of this Github repo.
 
 ### 3. Install Anaconda distribution. 
 
