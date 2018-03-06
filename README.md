@@ -47,7 +47,16 @@ To install Anaconda we can follow the following instructions, depending on our o
   - [Installing on Windows](https://conda.io/docs/user-guide/install/windows.html)
   - [Installing on MAC](https://conda.io/docs/user-guide/install/macos.html)
   - [Installing on Linux](https://conda.io/docs/user-guide/install/linux.html)
-  
+
+After the installation, it will be necessary to update our ```$PATH``` environment variable to take into account the path to the bin directory of the new Anaconda installation. We do that adding editing our ```.bashrc``` file.  We need to remember the path where anaconda was installed, it is usually installed in the base of our home directory, under the folder anaconda3 (or 4, depending on the version we have installed).
+
+To do so we have to add the following line into our shell profile file (do it in a new Terminal window):
+
+```{bash}
+  cd $HOME
+  echo "export PATH=$PATH:$HOME/anaconda3/bin" >> .bashrc
+```
+
 At the end of the installation we should be able to execute the following command in a new Terminal window:
   
 ```{bash}
