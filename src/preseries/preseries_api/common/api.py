@@ -18,7 +18,7 @@ DEFAULT_INITIAL_TIMEOUT = 180  # seconds
 
 PRESERIES_PROTOCOL = os.getenv("PRESERIES_PROTOCOL", "https")
 PRESERIES_HOST = os.getenv("PRESERIES_HOST", "preseries.io")
-PRESERIES_PORT = os.getenv("PRESERIES_PORT", 80)
+PRESERIES_PORT = os.getenv("PRESERIES_PORT", 443)
 PRESERIES_API_VERSION = os.getenv("PRESERIES_API_VERSION", "zion")
 
 PRESERIES_COMPANIES_SEARCH_ENDPOINT = "/company_search"
@@ -36,7 +36,7 @@ if not PRESERIES_API_KEY:
         "The PRESERIES_API_KEY environment variable must be set")
 
 URL = (PRESERIES_PROTOCOL + '://' + PRESERIES_HOST + ':' +
-       PRESERIES_PORT + '/' + PRESERIES_API_VERSION + '/')
+       str(PRESERIES_PORT) + '/' + PRESERIES_API_VERSION + '/')
 
 COMPANIES_SEARCH_PATH = 'company_search/'
 COMPANIES_DATA_PATH = 'company_data/'
