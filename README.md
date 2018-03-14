@@ -8,6 +8,10 @@ This page focuses on how to set up a local environment in order import/export Pr
 
 Before starting with the instructions, please remember that you need to define your credentials as environment variables. More information can be found here: https://preseries.com/developers/authentication
 
+1. [Setup](#setup)
+2. [Examples](#examples)
+    - [Import companies in a new portfolio](#create-a-portfolio-from-an-excel-file)
+    - [Export data about companies](#export-companies-data-from-an-excel-file)
 
 ## Setup
 
@@ -152,7 +156,13 @@ This example shows how to export all the data available in PreSeries about compa
 If you want to inspect the code you can find it inside the following folder:
 
 ```{bash}
-$BASE_PATH/src/preseries/preseries_api/companies/get_companies_data
+<BASE_PATH>/src/preseries/preseries_api/companies/get_companies_data
+```
+
+And define the following environment variable:
+
+```{bash}
+export PYTHONPATH=<BASE_PATH>/src/preseries/preseries_api
 ```
 
 To run the code you will need to execute the following command:
