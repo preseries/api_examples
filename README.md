@@ -97,7 +97,7 @@ Activate the environment:
     
     - On macOS and Linux, in your Terminal Window, run ```source activate preseries_api_examples```
 
-You need to change the working directory (current folder) to the ```$BASE_PATH/api_examples``` path where the api_examples code has been cloned. Inside the folder you should be able to see the __setup.py__ file.
+You need to change the working directory (current folder) to the ```<BASE_PATH>/api_examples``` path where the api_examples code has been cloned. Inside the folder you should be able to see the __setup.py__ file.
 
 If you did not do it before, you need to install all the required libraries before running the examples:
 
